@@ -18,10 +18,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 14
-
     - name: init
       run: npm install
     - name: run
+      id: run
+      uses: nick-fields/retry@v2
       env:
         TY_USER_NAME: ${{secrets.TY_USER_NAME}}
         TY_PASSWORD: ${{secrets.TY_PASSWORD}}
@@ -33,4 +34,8 @@ jobs:
         TY_PASSWORD3: ${{secrets.TY_PASSWORD3}}
         TY_USER_NAME4: ${{secrets.TY_USER_NAME4}}
         TY_PASSWORD4: ${{secrets.TY_PASSWORD4}}
-      run: npm start
+        SENDKEY: ${{secrets.SENDKEY}}
+      with:
+        timeout_minutes: 10
+        max_attempts: 3
+        command: npm start
